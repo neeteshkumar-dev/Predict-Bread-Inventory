@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — BreadSense AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold2:#E8C97A;--gold3:#F5E4B0;--border:rgba(201,168,76,0.15);--border2:rgba(201,168,76,0.28);--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);--cream:#FAF6EE;--ink:#0A0A0A;--ink2:#1A1A1A;--ink3:#2C2C2C;--slate:#4A4A5A;--slate2:#6B6B7E;--slate3:#9090A0;--green:#2D7A4F;--green2:#3DAA6B;--red:#C0392B;--blue:#2056A8;--radius:18px;--radius-sm:12px;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.55;}
+.bg-radial{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 10% 0%,rgba(201,168,76,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 90% 100%,rgba(45,122,79,0.06) 0%,transparent 60%);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(201,168,76,0.3);}
+.nav-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--cream);letter-spacing:-.01em;}
+.nav-brand em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:.25rem}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--slate3);text-decoration:none;padding:7px 16px;border-radius:8px;transition:color .2s,background .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--cream);background:rgba(255,255,255,0.07)}
+.nav-links a.active{color:var(--gold)}
+.nav-cta{font-size:13px;font-weight:600;padding:8px 20px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);text-decoration:none;transition:box-shadow .2s,transform .2s;box-shadow:0 3px 14px rgba(201,168,76,0.25);}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(201,168,76,0.38)}
+
+.page-hero{padding:140px 3rem 5rem;text-align:center;position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.1);border:1px solid var(--border2);padding:7px 18px;border-radius:30px;margin-bottom:2rem;animation:fadeUp .7s ease both;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem;animation:fadeUp .7s .1s ease both;}
+.page-hero p{font-size:1.05rem;color:var(--slate2);line-height:1.8;font-weight:300;animation:fadeUp .7s .2s ease both;}
+
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);opacity:.25;margin:0;position:relative;z-index:1;}
+
+.section{padding:6rem 3rem;position:relative;z-index:1;max-width:1120px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);font-weight:700;letter-spacing:-.025em;line-height:1.2;margin-bottom:1rem;}
+.section-sub{font-size:1rem;color:var(--slate2);max-width:520px;margin:0 auto;line-height:1.8;font-weight:300;}
+
+/* SUPPLY CHAIN STEPS */
+.supply-chain{display:flex;flex-direction:column;gap:1.25rem;max-width:800px;margin:0 auto;}
+.sc-item{
+  display:flex;align-items:flex-start;gap:1.5rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2rem 2.25rem;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s,box-shadow .3s;
+}
+.sc-item:hover{transform:translateX(6px);border-color:var(--border2);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.sc-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.05),transparent);opacity:0;transition:opacity .3s;}
+.sc-item:hover::before{opacity:1}
+.sc-num{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--ink);
+  box-shadow:0 4px 16px rgba(201,168,76,0.3);
+}
+.sc-content h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;margin-bottom:.5rem;}
+.sc-content p{font-size:14px;color:var(--slate2);line-height:1.7;font-weight:300;}
+.sc-connector{width:2px;height:24px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0 auto;opacity:.3;}
+
+/* PROBLEM / SOLUTION */
+.prob-sol{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;}
+.prob-card,.sol-card{background:var(--card);border-radius:var(--radius);padding:2.25rem;border:1px solid var(--border);}
+.prob-card{border-color:rgba(192,57,43,0.25);background:rgba(192,57,43,0.04);}
+.sol-card{border-color:rgba(45,122,79,0.25);background:rgba(45,122,79,0.04);}
+.ps-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem;}
+.ps-label.prob{color:#E57373;}
+.ps-label.sol{color:var(--green2);}
+.ps-list{list-style:none;display:flex;flex-direction:column;gap:.75rem;}
+.ps-list li{font-size:14px;color:var(--slate2);display:flex;align-items:flex-start;gap:10px;line-height:1.5;font-weight:300;}
+.ps-list li span{flex-shrink:0;margin-top:2px;}
+
+/* TEAM / TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;}
+.tech-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:1.5rem;text-align:center;
+  transition:transform .25s,border-color .25s;
+}
+.tech-card:hover{transform:translateY(-4px);border-color:var(--border2);}
+.tech-icon{font-size:28px;margin-bottom:.75rem;}
+.tech-name{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:.25rem;}
+.tech-role{font-size:12px;color:var(--slate3);font-weight:300;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;}
+.stat-c{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;transition:transform .25s,border-color .25s;}
+.stat-c:hover{transform:translateY(-4px);border-color:var(--border2);}
+.stat-n{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;color:var(--gold2);margin-bottom:.3rem;}
+.stat-l{font-size:12px;color:var(--slate3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;}
+
+footer{border-top:1px solid var(--border);padding:3rem;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:.4rem;}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-copy{font-size:12px;color:var(--slate3);}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:flex-end}
+.footer-links a{font-size:13px;color:var(--slate3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px}
+@media(max-width:768px){nav{padding:0 1.5rem}.nav-links{display:none}.section{padding:4rem 1.5rem}.prob-sol{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}footer{grid-template-columns:1fr;text-align:center}.footer-links{justify-content:center}}
+.content-link{color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.35);transition:color .2s,border-color .2s;font-weight:500;}.content-link:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="bg-radial"></div>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">🍞</div>
+    <div class="nav-brand">Bread<em>Sense</em> AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="data.html">Data Fields</a>
+    <a href="predictor.html">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+  </div>
+  <a href="predictor.html" class="nav-cta">Try Predictor →</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-eyebrow">📦 About the Project</div>
+  <h1>The Supply Chain Problem We Solve</h1>
+  <p>Grupo Bimbo — Mexico's largest bakery — delivers millions of bread units weekly. Predicting exactly how many each shop needs is a massive, high-stakes machine learning challenge.</p>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- STATS -->
+<section class="section reveal">
+  <div class="stats-row">
+    <div class="stat-c"><div class="stat-n">74M+</div><div class="stat-l">Delivery Records</div></div>
+    <div class="stat-c"><div class="stat-n">7M</div><div class="stat-l">Predictions</div></div>
+    <div class="stat-c"><div class="stat-n">240K</div><div class="stat-l">Training Rows</div></div>
+    <div class="stat-c"><div class="stat-n">30</div><div class="stat-l">Decision Trees</div></div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- SUPPLY CHAIN -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">🚚 The Delivery Flow</div>
+    <h2 class="section-title">How Bimbo's Supply Chain Works</h2>
+    <p class="section-sub">From bakery to shelf — here's the journey every bread product takes, and where AI makes the difference.</p>
+  </div>
+  <div class="supply-chain">
+    <div class="sc-item reveal">
+      <div class="sc-num">1</div>
+      <div class="sc-content">
+        <h3>🏭 Bakery Produces</h3>
+        <p>Grupo Bimbo bakes thousands of products daily — bread, cakes, tortillas, snacks — across facilities spanning all of Mexico. Every batch must be delivered before it goes stale.</p>
+      </div>
+    </div>
+    <div class="sc-connector"></div>
+    <div class="sc-item reveal">
+      <div class="sc-num">2</div>
+      <div class="sc-content">
+        <h3>🚚 Depot Distributes</h3>
+        <p>Regional warehouses (Agencias) receive shipments and assign products to specific delivery routes. Each Agencia serves a geographic area of Mexico.</p>
+      </div>
+    </div>
+    <div class="sc-connector"></div>
+    <div class="sc-item reveal">
+      <div class="sc-num">3</div>
+      <div class="sc-content">
+        <h3>🗺️ Route Visits Shops</h3>
+        <p>Each truck (Ruta) follows a fixed weekly route, visiting the same shops on a regular schedule. The driver loads the truck based on expected demand for each stop.</p>
+      </div>
+    </div>
+    <div class="sc-connector"></div>
+    <div class="sc-item reveal">
+      <div class="sc-num">4</div>
+      <div class="sc-content">
+        <h3>🏪 Shop Sells or Returns</h3>
+        <p>Shops sell what they can. Products unsold by the next delivery are returned to the truck — returned products represent direct financial losses. High returns = overstocked. Zero returns but empty shelves = understocked.</p>
+      </div>
+    </div>
+    <div class="sc-connector"></div>
+    <div class="sc-item reveal" style="border-color:var(--border2);background:rgba(201,168,76,0.05)">
+      <div class="sc-num" style="background:linear-gradient(135deg,var(--green),var(--green2));color:#fff">AI</div>
+      <div class="sc-content">
+        <h3>🤖 <a href="pipeline.html" class="content-link">Model Predicts Next Week's Demand</a></h3>
+        <p>Our Random Forest model analyses this week's sales, returns, and revenue data to predict exactly how many units each shop needs next week — enabling drivers to load their trucks with precision, not guesswork. <a href="pipeline.html" class="content-link">See how it was built →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- PROBLEM / SOLUTION -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">⚖️ The Core Challenge</div>
+    <h2 class="section-title">Why Getting It Wrong Is Expensive</h2>
+    <p class="section-sub">Every unit over or under the correct demand is money lost. At Bimbo's scale, small errors add up to enormous costs.</p>
+  </div>
+  <div class="prob-sol reveal">
+    <div class="prob-card">
+      <div class="ps-label prob">❌ Overstocking Problems</div>
+      <ul class="ps-list">
+        <li><span>🗑️</span> Bread goes stale and must be returned — direct product loss</li>
+        <li><span>💸</span> Returns must be transported back, wasted truck capacity</li>
+        <li><span>📦</span> Overstocked shelves crowd out other products</li>
+        <li><span>📉</span> Return rates inflate operational costs company-wide</li>
+        <li><span>⚠️</span> Too many returns can damage supplier relationships</li>
+      </ul>
+    </div>
+    <div class="sol-card">
+      <div class="ps-label sol">✅ What AI Fixes</div>
+      <ul class="ps-list">
+        <li><span>🎯</span> Predicts exact demand per product per shop per week</li>
+        <li><span>📊</span> Uses <a href="data.html" class="content-link">97% signal from current week's sales</a> as primary input</li>
+        <li><span>🌲</span> <a href="pipeline.html" class="content-link">30-tree Random Forest ensemble</a> for robust predictions</li>
+        <li><span>📉</span> <a href="pipeline.html" class="content-link">Log-transforms skewed demand</a> for learnable distribution</li>
+        <li><span>🚀</span> <a href="predictor.html" class="content-link">Generates 7M+ predictions</a> in a single inference run</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- TECH STACK -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">🔧 Technology Stack</div>
+    <h2 class="section-title">Built With</h2>
+    <p class="section-sub">Every tool in the stack was chosen for performance, accessibility, and reproducibility on free compute. <a href="pipeline.html" class="content-link">See the full pipeline →</a></p>
+  </div>
+  <div class="tech-grid reveal">
+    <div class="tech-card"><div class="tech-icon">🐍</div><div class="tech-name">Python 3</div><div class="tech-role">Core Language</div></div>
+    <div class="tech-card"><div class="tech-icon">🌲</div><div class="tech-name">scikit-learn</div><div class="tech-role">Random Forest</div></div>
+    <div class="tech-card"><div class="tech-icon">🐼</div><div class="tech-name">pandas</div><div class="tech-role">Data Processing</div></div>
+    <div class="tech-card"><div class="tech-icon">🔢</div><div class="tech-name">NumPy</div><div class="tech-role">Numerical Ops</div></div>
+    <div class="tech-card"><div class="tech-icon">☁️</div><div class="tech-name">Google Colab</div><div class="tech-role">Free GPU/CPU</div></div>
+    <div class="tech-card"><div class="tech-icon">🏆</div><div class="tech-name">Kaggle API</div><div class="tech-role">Dataset Source</div></div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Bread<em>Sense</em> AI</div>
+    <div class="footer-copy">Grupo Bimbo Inventory Demand · Kaggle Competition · Random Forest · scikit-learn · Python</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="data.html">Data Fields</a>
+    <a href="predictor.html">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+    <a href="https://www.kaggle.com/c/grupo-bimbo-inventory-demand" target="_blank">Kaggle ↗</a>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

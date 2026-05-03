@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Fields — BreadSense AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold2:#E8C97A;--gold3:#F5E4B0;--border:rgba(201,168,76,0.15);--border2:rgba(201,168,76,0.28);--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);--cream:#FAF6EE;--ink:#0A0A0A;--ink2:#1A1A1A;--ink3:#2C2C2C;--slate:#4A4A5A;--slate2:#6B6B7E;--slate3:#9090A0;--green:#2D7A4F;--green2:#3DAA6B;--red:#C0392B;--blue:#2056A8;--amber:#D97706;--radius:18px;--radius-sm:12px;}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.55;}
+.bg-radial{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 10% 0%,rgba(201,168,76,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 90% 100%,rgba(45,122,79,0.06) 0%,transparent 60%);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(201,168,76,0.3);}
+.nav-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--cream);}
+.nav-brand em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:.25rem}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--slate3);text-decoration:none;padding:7px 16px;border-radius:8px;transition:color .2s,background .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--cream);background:rgba(255,255,255,0.07)}
+.nav-links a.active{color:var(--gold)}
+.nav-cta{font-size:13px;font-weight:600;padding:8px 20px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);text-decoration:none;transition:box-shadow .2s,transform .2s;}
+.nav-cta:hover{transform:translateY(-1px);}
+
+.page-hero{padding:140px 3rem 5rem;text-align:center;position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.1);border:1px solid var(--border2);padding:7px 18px;border-radius:30px;margin-bottom:2rem;animation:fadeUp .7s ease both;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem;animation:fadeUp .7s .1s ease both;}
+.page-hero p{font-size:1.05rem;color:var(--slate2);line-height:1.8;font-weight:300;animation:fadeUp .7s .2s ease both;}
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);opacity:.25;margin:0;position:relative;z-index:1;}
+.section{padding:6rem 3rem;position:relative;z-index:1;max-width:1120px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);font-weight:700;letter-spacing:-.025em;line-height:1.2;margin-bottom:1rem;}
+.section-sub{font-size:1rem;color:var(--slate2);max-width:520px;margin:0 auto;line-height:1.8;font-weight:300;}
+
+/* CATEGORY TABS */
+.cat-tabs{display:flex;justify-content:center;gap:.75rem;margin-bottom:3rem;flex-wrap:wrap;}
+.cat-tab{
+  font-size:13px;font-weight:500;padding:8px 20px;border-radius:30px;cursor:pointer;
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--slate2);
+  transition:all .2s;text-align:center;
+}
+.cat-tab.active,.cat-tab:hover{background:rgba(201,168,76,0.12);border-color:var(--border2);color:var(--gold);}
+
+/* DATA CARDS GRID */
+.data-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;}
+.data-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem;display:flex;align-items:flex-start;gap:1.25rem;
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+  position:relative;overflow:hidden;
+}
+.data-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.04),transparent);opacity:0;transition:opacity .25s;}
+.data-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.data-card:hover::before{opacity:1}
+.data-card.target{border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.05);grid-column:1/-1;}
+.data-card.target::after{content:'TARGET VARIABLE';position:absolute;top:14px;right:14px;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--gold);background:rgba(201,168,76,0.15);padding:3px 10px;border-radius:20px;}
+.di-icon{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.di-icon.gold{background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.2);}
+.di-icon.green{background:rgba(45,122,79,0.15);border:1px solid rgba(45,122,79,0.2);}
+.di-icon.red{background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.18);}
+.di-icon.blue{background:rgba(32,86,168,0.15);border:1px solid rgba(32,86,168,0.2);}
+.di-icon.amber{background:rgba(217,119,6,0.12);border:1px solid rgba(217,119,6,0.18);}
+.di-body{}
+.di-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:3px;}
+.di-code{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--slate3);margin-bottom:.6rem;letter-spacing:.04em;}
+.di-desc{font-size:13px;color:var(--slate2);line-height:1.65;font-weight:300;}
+.di-importance{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;color:var(--gold);
+  background:rgba(201,168,76,0.1);padding:3px 10px;border-radius:20px;
+  margin-top:.75rem;
+}
+
+/* SCHEMA TABLE */
+.schema-table{width:100%;border-collapse:collapse;margin-top:2rem;}
+.schema-table th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate3);padding:.75rem 1rem;border-bottom:1px solid var(--border2);}
+.schema-table td{padding:.9rem 1rem;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--slate2);font-weight:300;vertical-align:top;}
+.schema-table tr:hover td{background:rgba(201,168,76,0.03);}
+.schema-table td:first-child{color:var(--cream);font-weight:500;}
+.schema-table td .mono{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate3);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:5px;}
+.schema-table td .tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.05em;}
+.tag.cat{background:rgba(32,86,168,0.15);color:#7EB3FF;}
+.tag.num{background:rgba(45,122,79,0.15);color:var(--green2);}
+.tag.target-t{background:rgba(201,168,76,0.15);color:var(--gold);}
+
+footer{border-top:1px solid var(--border);padding:3rem;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:.4rem;}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-copy{font-size:12px;color:var(--slate3);}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:flex-end}
+.footer-links a{font-size:13px;color:var(--slate3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px}
+@media(max-width:768px){nav{padding:0 1.5rem}.nav-links{display:none}.section{padding:4rem 1.5rem}.data-grid{grid-template-columns:1fr}footer{grid-template-columns:1fr;text-align:center}.footer-links{justify-content:center}}
+.content-link{color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.35);transition:color .2s,border-color .2s;font-weight:500;}.content-link:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="bg-radial"></div>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">🍞</div>
+    <div class="nav-brand">Bread<em>Sense</em> AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="data.html" class="active">Data Fields</a>
+    <a href="predictor.html">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+  </div>
+  <a href="predictor.html" class="nav-cta">Try Predictor →</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-eyebrow">🗂️ Data Dictionary</div>
+  <h1>What Each Data Field Means</h1>
+  <p>The model uses 10 input fields from Grupo Bimbo's weekly delivery records to predict inventory demand. Here's what each one means — in plain English. <a href="pipeline.html" class="content-link">See how these fields power the ML pipeline →</a></p>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- IDENTIFIER FIELDS -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">🔑 Identifier Fields</div>
+    <h2 class="section-title">Location & Context Variables</h2>
+    <p class="section-sub">These categorical fields tell the model who, where, and when — providing context for the prediction.</p>
+  </div>
+  <div class="data-grid">
+    <div class="data-card reveal">
+      <div class="di-icon blue">📅</div>
+      <div class="di-body">
+        <div class="di-name">Week Number</div>
+        <div class="di-code">Semana · Integer · Range: 1–9</div>
+        <div class="di-desc">Which week of the sales period. Helps the model detect seasonal patterns — some weeks sell significantly more than others, especially around holidays.</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon blue">🏬</div>
+      <div class="di-body">
+        <div class="di-name">Sales Depot ID</div>
+        <div class="di-code">Agencia_ID · Categorical Integer</div>
+        <div class="di-desc">Each depot is a regional warehouse that distributes to a geographic area. Different depots serve different parts of Mexico, each with its own demand patterns and product mixes.</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon blue">🛒</div>
+      <div class="di-body">
+        <div class="di-name">Sales Channel</div>
+        <div class="di-code">Canal_ID · Categorical Integer</div>
+        <div class="di-desc">The type of shop — supermarket chain, small neighbourhood kiosk, restaurant, or wholesale buyer. Each channel has dramatically different volume and return behaviour.</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon blue">🗺️</div>
+      <div class="di-body">
+        <div class="di-name">Delivery Route</div>
+        <div class="di-code">Ruta_SAK · Categorical Integer</div>
+        <div class="di-desc">The specific truck route that services this shop. Each route visits the same set of shops every week. Route context helps the model understand geographic demand clustering.</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon amber">🏪</div>
+      <div class="di-body">
+        <div class="di-name">Shop / Client ID</div>
+        <div class="di-code">Cliente_ID · Categorical Integer</div>
+        <div class="di-desc">Unique identifier for every individual shop or client that receives deliveries. There are millions of unique clients across Mexico — each has its own historical demand pattern.</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon amber">🍞</div>
+      <div class="di-body">
+        <div class="di-name">Product ID</div>
+        <div class="di-code">Producto_ID · Categorical Integer</div>
+        <div class="di-desc">Which specific bread, cake, tortilla, or snack product. Bimbo has hundreds of products — each with its own shelf life, price point, and demand curve.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- SIGNAL FIELDS -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">📊 Predictive Signal Fields</div>
+    <h2 class="section-title">This Week's Performance Data</h2>
+    <p class="section-sub">These four numerical fields are the actual predictive signals. Units sold this week is the most powerful single predictor — accounting for 97% of the model's decision. <a href="pipeline.html" class="content-link">See how the model uses them →</a></p>
+  </div>
+  <div class="data-grid">
+    <div class="data-card reveal" style="border-color:rgba(45,122,79,0.3);background:rgba(45,122,79,0.04)">
+      <div class="di-icon green">📦</div>
+      <div class="di-body">
+        <div class="di-name">Units Sold This Week</div>
+        <div class="di-code">Venta_uni_hoy · Float32</div>
+        <div class="di-desc">How many units the shop actually sold this week. This is the single most powerful predictor — it directly signals how hungry the shop is for product. The model assigns 97% of its predictive weight to this field.</div>
+        <div class="di-importance">⭐ 97% Feature Importance</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon green">💰</div>
+      <div class="di-body">
+        <div class="di-name">Sales Revenue This Week</div>
+        <div class="di-code">Venta_hoy · Float32 · Pesos (₱)</div>
+        <div class="di-desc">Total pesos earned from sales this week. Reflects both volume and the price of products sold. Correlated with units sold but adds price-point context — a shop selling premium products has different patterns.</div>
+        <div class="di-importance">⬦ 0.3% Feature Importance</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon red">↩️</div>
+      <div class="di-body">
+        <div class="di-name">Returns Next Week (Units)</div>
+        <div class="di-code">Dev_uni_proxima · Float32</div>
+        <div class="di-desc">Units of unsold or stale bread returned to the delivery truck next week. High return count signals the shop was overstocked this week — the model should send less next time. The model weights this at 2%.</div>
+        <div class="di-importance">⬦ 2% Feature Importance</div>
+      </div>
+    </div>
+    <div class="data-card reveal">
+      <div class="di-icon red">🔄</div>
+      <div class="di-body">
+        <div class="di-name">Returns Next Week (Pesos)</div>
+        <div class="di-code">Dev_proxima · Float32 · Pesos (₱)</div>
+        <div class="di-desc">Monetary value of returned product. Helps the model understand the financial severity of overstocking — not just how many units came back, but what they were worth.</div>
+        <div class="di-importance">⬦ 0.8% Feature Importance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<section class="section" id="target">
+  <div class="section-header">
+    <div class="section-eyebrow">🎯 Target Variable</div>
+    <h2 class="section-title">What the Model Predicts</h2>
+  </div>
+  <div class="data-grid reveal">
+    <div class="data-card target">
+      <div class="di-icon gold" style="width:56px;height:56px;font-size:24px">🎯</div>
+      <div class="di-body">
+        <div class="di-name" style="font-size:18px">Predicted Demand — Adjusted Units</div>
+        <div class="di-code">Demanda_uni_equil · Float32 → Integer</div>
+        <div class="di-desc" style="font-size:14px">The adjusted demand in units. This is what the model predicts and what it was trained on. It represents the true quantity the shop needed — calculated from the Bimbo dataset as: <strong style="color:var(--cream)">Adjusted Demand = Units Sold + Units Returned − Stale Adjustments</strong>. The delivery truck should bring exactly this many units next week to neither overstock nor understock the shop. <a href="predictor.html" class="content-link">Try the live predictor →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- SCHEMA TABLE -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-eyebrow">📋 Complete Schema</div>
+    <h2 class="section-title">Full Field Reference</h2>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;" class="reveal">
+    <table class="schema-table">
+      <thead>
+        <tr>
+          <th>Field Name</th>
+          <th>Column (Spanish)</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Week Number</td><td><span class="mono">Semana</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Week of sales period (1–9)</td></tr>
+        <tr><td>Sales Depot ID</td><td><span class="mono">Agencia_ID</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Regional warehouse identifier</td></tr>
+        <tr><td>Sales Channel</td><td><span class="mono">Canal_ID</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Shop type (supermarket, kiosk, etc.)</td></tr>
+        <tr><td>Delivery Route</td><td><span class="mono">Ruta_SAK</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Truck route identifier</td></tr>
+        <tr><td>Shop / Client ID</td><td><span class="mono">Cliente_ID</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Unique shop or client identifier</td></tr>
+        <tr><td>Product ID</td><td><span class="mono">Producto_ID</span></td><td><span class="tag cat">Categorical</span></td><td>Identifier</td><td>Specific product SKU</td></tr>
+        <tr><td>Units Sold This Week</td><td><span class="mono">Venta_uni_hoy</span></td><td><span class="tag num">Numerical</span></td><td>Signal (97%)</td><td>Units sold — primary predictor</td></tr>
+        <tr><td>Revenue This Week</td><td><span class="mono">Venta_hoy</span></td><td><span class="tag num">Numerical</span></td><td>Signal (0.3%)</td><td>Pesos earned from sales this week</td></tr>
+        <tr><td>Returns (Units)</td><td><span class="mono">Dev_uni_proxima</span></td><td><span class="tag num">Numerical</span></td><td>Signal (2%)</td><td>Unsold units returned next week</td></tr>
+        <tr><td>Returns (Pesos)</td><td><span class="mono">Dev_proxima</span></td><td><span class="tag num">Numerical</span></td><td>Signal (0.8%)</td><td>Monetary value of returned product</td></tr>
+        <tr style="background:rgba(201,168,76,0.04)"><td style="color:var(--gold)">Predicted Demand</td><td><span class="mono">Demanda_uni_equil</span></td><td><span class="tag target-t">Target</span></td><td>Output</td><td>Adjusted demand — what the model predicts</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Bread<em>Sense</em> AI</div>
+    <div class="footer-copy">Grupo Bimbo Inventory Demand · Kaggle Competition · Random Forest · scikit-learn · Python</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="data.html">Data Fields</a>
+    <a href="predictor.html">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+    <a href="https://www.kaggle.com/c/grupo-bimbo-inventory-demand" target="_blank">Kaggle ↗</a>
+  </div>
+</footer>
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

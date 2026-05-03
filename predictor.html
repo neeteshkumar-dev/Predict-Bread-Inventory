@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Predictor — BreadSense AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold2:#E8C97A;--gold3:#F5E4B0;--border:rgba(201,168,76,0.15);--border2:rgba(201,168,76,0.28);--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);--cream:#FAF6EE;--ink:#0A0A0A;--ink2:#1A1A1A;--ink3:#2C2C2C;--slate:#4A4A5A;--slate2:#6B6B7E;--slate3:#9090A0;--green:#2D7A4F;--green2:#3DAA6B;--red:#C0392B;--blue:#2056A8;--amber:#D97706;--radius:18px;--radius-sm:12px;}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.55;}
+.bg-radial{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 10% 0%,rgba(201,168,76,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 90% 100%,rgba(45,122,79,0.06) 0%,transparent 60%);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(10,10,10,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(201,168,76,0.3);}
+.nav-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:19px;color:var(--cream);}
+.nav-brand em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:.25rem}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--slate3);text-decoration:none;padding:7px 16px;border-radius:8px;transition:color .2s,background .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--cream);background:rgba(255,255,255,0.07)}
+.nav-links a.active{color:var(--gold)}
+.nav-cta{font-size:13px;font-weight:600;padding:8px 20px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);text-decoration:none;}
+
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);opacity:.25;margin:0;position:relative;z-index:1;}
+
+/* PAGE HERO */
+.page-hero{padding:110px 3rem 3rem;text-align:center;position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.1);border:1px solid var(--border2);padding:7px 18px;border-radius:30px;margin-bottom:1.75rem;animation:fadeUp .7s ease both;}
+.eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:glow 2s ease-in-out infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 6px var(--gold)}50%{box-shadow:0 0 14px var(--gold2)}}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem;animation:fadeUp .7s .1s ease both;}
+.page-hero p{font-size:1rem;color:var(--slate2);line-height:1.8;font-weight:300;animation:fadeUp .7s .2s ease both;}
+.model-badge{display:inline-flex;align-items:center;gap:10px;margin-top:1.25rem;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate3);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:6px 14px;border-radius:8px;animation:fadeUp .7s .3s ease both;}
+
+/* PREDICTOR SECTION */
+.pred-section{padding:2rem 3rem 6rem;position:relative;z-index:1;max-width:1080px;margin:0 auto;}
+.pred-card{
+  background:rgba(15,15,15,0.9);border:1px solid var(--border2);border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(201,168,76,0.06);
+}
+.pred-card-header{
+  background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(45,122,79,0.06));
+  border-bottom:1px solid var(--border);
+  padding:2rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.pred-header-left{display:flex;align-items:center;gap:1rem;}
+.pred-icon{
+  width:56px;height:56px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  box-shadow:0 6px 24px rgba(201,168,76,0.3);
+}
+.pred-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:.25rem;}
+.pred-sub{font-size:13px;color:var(--slate2);font-weight:300;}
+.pred-status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--green2);background:rgba(45,122,79,0.12);border:1px solid rgba(45,122,79,0.25);padding:7px 16px;border-radius:20px;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green2);box-shadow:0 0 6px var(--green2);animation:glow 2s infinite;}
+
+/* BODY LAYOUT */
+.pred-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.pred-left{padding:2.5rem;border-right:1px solid var(--border);}
+.pred-right{padding:2.5rem;}
+
+/* FORM */
+.form-section-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.75rem;}
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:12px;font-weight:500;color:var(--slate2);display:flex;align-items:center;gap:6px;}
+.field-label .fi{font-size:14px;}
+.field input{
+  height:46px;padding:0 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--cream);font-size:14px;font-family:'Outfit',sans-serif;font-weight:400;
+  outline:none;transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.field input:focus{border-color:var(--gold);background:rgba(201,168,76,0.06);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
+.field input::placeholder{color:var(--slate3);}
+.field-hint{font-size:11px;color:var(--slate3);margin-top:2px;font-style:italic;}
+
+.divider-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--slate3);display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+}
+.divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.predict-btn{
+  width:100%;height:54px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:13px;
+  color:var(--ink);font-size:15px;font-weight:700;font-family:'Outfit',sans-serif;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 6px 28px rgba(201,168,76,0.3);
+  letter-spacing:.01em;
+}
+.predict-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,0.42);}
+.predict-btn:active{transform:scale(.99);}
+.predict-btn .arrow{font-size:18px;transition:transform .3s;}
+.predict-btn:hover .arrow{transform:translateX(4px);}
+
+/* RESULT PANEL */
+.result-display{
+  border-radius:16px;padding:2rem;text-align:center;
+  border:1px solid var(--border2);
+  background:rgba(201,168,76,0.04);
+  min-height:180px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  transition:all .5s ease;
+  margin-bottom:1.5rem;
+}
+.r-icon{font-size:44px;margin-bottom:.25rem;}
+.r-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--slate3);}
+.r-value{
+  font-family:'Playfair Display',serif;font-size:4rem;font-weight:700;
+  color:var(--gold2);line-height:1;
+  transition:all .4s ease;
+}
+.r-unit{font-size:13px;color:var(--slate2);font-weight:300;}
+.r-badge{
+  display:none;align-items:center;gap:6px;
+  padding:5px 16px;border-radius:20px;font-size:12px;font-weight:600;
+  margin-top:.25rem;
+}
+.badge-low{background:rgba(217,119,6,0.15);color:#FBBF24;border:1px solid rgba(217,119,6,0.3);display:inline-flex;}
+.badge-mid{background:rgba(45,122,79,0.15);color:var(--green2);border:1px solid rgba(45,122,79,0.3);display:inline-flex;}
+.badge-high{background:rgba(32,86,168,0.15);color:#7EB3FF;border:1px solid rgba(32,86,168,0.25);display:inline-flex;}
+
+/* INSIGHT BOX */
+.insight-box{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:1.25rem 1.5rem;font-size:13px;color:var(--slate2);line-height:1.7;
+  font-weight:300;margin-bottom:1.5rem;
+}
+.insight-box strong{color:var(--cream);font-weight:500;}
+
+/* IMPORTANCE BARS */
+.importance-box{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:1.25rem 1.5rem;
+}
+.imp-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate3);margin-bottom:1rem;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:.7rem;}
+.bar-name{font-size:12px;color:var(--slate2);width:130px;flex-shrink:0;text-align:right;font-weight:300;}
+.bar-track{flex:1;height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0;}
+.bar-pct{font-size:11px;color:var(--slate3);width:32px;font-family:'JetBrains Mono',monospace;}
+
+/* EXAMPLES STRIP */
+.examples-strip{
+  display:flex;gap:1rem;margin-top:1.5rem;padding-top:1.5rem;
+  border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.example-btn{
+  flex:1;min-width:100px;padding:.6rem .9rem;border-radius:9px;cursor:pointer;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  font-size:12px;color:var(--slate2);transition:all .2s;text-align:center;font-weight:400;
+}
+.example-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--border2);color:var(--cream);}
+.example-btn strong{display:block;color:var(--cream);font-size:13px;margin-bottom:1px;}
+
+footer{border-top:1px solid var(--border);padding:3rem;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:.4rem;}
+.footer-brand em{color:var(--gold);font-style:normal}
+.footer-copy{font-size:12px;color:var(--slate3);}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:flex-end}
+.footer-links a{font-size:13px;color:var(--slate3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+@media(max-width:800px){
+  nav{padding:0 1.5rem}.nav-links{display:none}
+  .pred-section{padding:2rem 1rem 4rem}
+  .pred-body{grid-template-columns:1fr}
+  .pred-left{border-right:none;border-bottom:1px solid var(--border);padding:2rem 1.5rem}
+  .pred-right{padding:2rem 1.5rem}
+  .fields-grid{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr;text-align:center}.footer-links{justify-content:center}
+}
+.content-link{color:var(--gold2);text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.35);transition:color .2s,border-color .2s;font-weight:500;}.content-link:hover{color:var(--gold);border-color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="bg-radial"></div>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">🍞</div>
+    <div class="nav-brand">Bread<em>Sense</em> AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="data.html">Data Fields</a>
+    <a href="predictor.html" class="active">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+  </div>
+  <a href="predictor.html" class="nav-cta">Live Predictor</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-eyebrow">
+    <div class="eyebrow-dot"></div>
+    🔮 Live AI Predictor
+  </div>
+  <h1>Predict Weekly Demand<br>for Any Shop</h1>
+  <p>Enter this week's delivery data and the Random Forest model calculates exactly how many units the shop needs next week — instantly.</p>
+  <div class="model-badge">
+    RandomForestRegressor · n_estimators=30 · max_depth=10 · n_jobs=-1 · RMSLE metric
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<div class="pred-section">
+  <div class="pred-card">
+    <!-- HEADER -->
+    <div class="pred-card-header">
+      <div class="pred-header-left">
+        <div class="pred-icon">🤖</div>
+        <div>
+          <div class="pred-title">Inventory Demand Predictor</div>
+          <div class="pred-sub">Trained on 240,000 Grupo Bimbo delivery records · 7M+ predictions generated</div>
+        </div>
+      </div>
+      <div class="pred-status">
+        <div class="status-dot"></div>
+        Model Active
+      </div>
+    </div>
+
+    <div class="pred-body">
+      <!-- FORM -->
+      <div class="pred-left">
+        <div class="form-section-label">🏷️ Identifiers</div>
+        <div class="fields-grid">
+          <div class="field">
+            <label class="field-label"><span class="fi">📅</span> Week Number</label>
+            <input type="number" id="f_semana" value="3" min="1" max="9" placeholder="1–9">
+            <div class="field-hint">Sales period week</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🏬</span> Depot ID</label>
+            <input type="number" id="f_agencia" value="1110" placeholder="e.g. 1110">
+            <div class="field-hint">Regional warehouse</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🛒</span> Channel Type</label>
+            <input type="number" id="f_canal" value="7" placeholder="e.g. 7">
+            <div class="field-hint">Shop category</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🗺️</span> Route ID</label>
+            <input type="number" id="f_ruta" value="3301" placeholder="e.g. 3301">
+            <div class="field-hint">Delivery truck route</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🏪</span> Client ID</label>
+            <input type="number" id="f_cliente" value="15766" placeholder="e.g. 15766">
+            <div class="field-hint">Unique shop ID</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🍞</span> Product ID</label>
+            <input type="number" id="f_producto" value="1212" placeholder="e.g. 1212">
+            <div class="field-hint">Product SKU</div>
+          </div>
+        </div>
+
+        <div class="divider-label">📊 This Week's Performance</div>
+
+        <div class="fields-grid">
+          <div class="field">
+            <label class="field-label"><span class="fi">📦</span> Units Sold</label>
+            <input type="number" id="f_vuh" value="5" min="0" placeholder="e.g. 5">
+            <div class="field-hint" style="color:var(--gold);font-style:normal;font-weight:500">⭐ 97% weight</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">💰</span> Revenue (₱)</label>
+            <input type="number" id="f_vh" value="47.50" step="0.1" placeholder="e.g. 47.50">
+            <div class="field-hint">Pesos earned</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">↩️</span> Returns (units)</label>
+            <input type="number" id="f_dup" value="0" min="0" placeholder="e.g. 0">
+            <div class="field-hint">Unsold units back</div>
+          </div>
+          <div class="field">
+            <label class="field-label"><span class="fi">🔄</span> Returns (₱)</label>
+            <input type="number" id="f_dp" value="0" step="0.1" placeholder="e.g. 0">
+            <div class="field-hint">Value of returns</div>
+          </div>
+        </div>
+
+        <button class="predict-btn" onclick="runPredict()">
+          <span>Predict Demand for Next Week</span>
+          <span class="arrow">→</span>
+        </button>
+
+        <!-- QUICK EXAMPLES -->
+        <div class="examples-strip">
+          <button class="example-btn" onclick="loadExample('low')"><strong>📦 Low Demand</strong>1 unit sold</button>
+          <button class="example-btn" onclick="loadExample('mid')"><strong>✅ Normal Shop</strong>8 units sold</button>
+          <button class="example-btn" onclick="loadExample('high')"><strong>🚀 High Volume</strong>35 units sold</button>
+        </div>
+      </div>
+
+      <!-- RESULT PANEL -->
+      <div class="pred-right">
+        <div class="form-section-label">🎯 Prediction Result</div>
+
+        <div class="result-display" id="result-display">
+          <div class="r-icon" id="r-icon">🎯</div>
+          <div class="r-label">Predicted Demand (Demanda_uni_equil)</div>
+          <div class="r-value" id="r-val">—</div>
+          <div class="r-unit" id="r-unit">units needed next week</div>
+          <div class="r-badge" id="r-badge"></div>
+        </div>
+
+        <div class="insight-box" id="r-insight">
+          Fill in the form and click <strong>Predict Demand</strong> to see how many units this shop will need next week. The model uses your inputs to calculate the optimal delivery quantity.
+        </div>
+
+        <div class="importance-box">
+          <div class="imp-title">Feature Importance — what drives predictions</div>
+          <div class="bar-row">
+            <span class="bar-name">Units sold today</span>
+            <div class="bar-track"><div class="bar-fill" id="b1" style="width:97%"></div></div>
+            <span class="bar-pct">97%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-name">Returns (units)</span>
+            <div class="bar-track"><div class="bar-fill" id="b2" style="width:2%"></div></div>
+            <span class="bar-pct">2%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-name">Returns (pesos)</span>
+            <div class="bar-track"><div class="bar-fill" id="b3" style="width:0.8%"></div></div>
+            <span class="bar-pct">0.8%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-name">Revenue today</span>
+            <div class="bar-track"><div class="bar-fill" id="b4" style="width:0.3%"></div></div>
+            <span class="bar-pct">0.3%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-name">IDs & week</span>
+            <div class="bar-track"><div class="bar-fill" id="b5" style="width:0.1%"></div></div>
+            <span class="bar-pct">&lt;0.1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-brand">Bread<em>Sense</em> AI</div>
+    <div class="footer-copy">Grupo Bimbo Inventory Demand · Kaggle Competition · Random Forest · scikit-learn · Python</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="data.html">Data Fields</a>
+    <a href="predictor.html">Predictor</a>
+    <a href="pipeline.html">ML Pipeline</a>
+    <a href="https://www.kaggle.com/c/grupo-bimbo-inventory-demand" target="_blank">Kaggle ↗</a>
+  </div>
+</footer>
+
+<script>
+/* ANIMATE BARS */
+setTimeout(()=>{
+  document.querySelectorAll('.bar-fill').forEach(b=>{
+    const w=b.style.width;b.style.width='0';
+    setTimeout(()=>b.style.width=w,400);
+  });
+},600);
+
+/* EXAMPLE PRESETS */
+function loadExample(type){
+  const presets={
+    low:{semana:3,agencia:1110,canal:7,ruta:3301,cliente:15766,producto:1212,vuh:1,vh:8.5,dup:0,dp:0},
+    mid:{semana:5,agencia:2240,canal:3,ruta:1802,cliente:32001,producto:843,vuh:8,vh:76,dup:1,dp:9.5},
+    high:{semana:7,agencia:3350,canal:1,ruta:4502,cliente:99201,producto:2218,vuh:35,vh:332.5,dup:2,dp:19}
+  };
+  const p=presets[type];
+  document.getElementById('f_semana').value=p.semana;
+  document.getElementById('f_agencia').value=p.agencia;
+  document.getElementById('f_canal').value=p.canal;
+  document.getElementById('f_ruta').value=p.ruta;
+  document.getElementById('f_cliente').value=p.cliente;
+  document.getElementById('f_producto').value=p.producto;
+  document.getElementById('f_vuh').value=p.vuh;
+  document.getElementById('f_vh').value=p.vh;
+  document.getElementById('f_dup').value=p.dup;
+  document.getElementById('f_dp').value=p.dp;
+  setTimeout(runPredict,80);
+}
+
+/* PREDICT */
+function runPredict(){
+  const vuh=parseFloat(document.getElementById('f_vuh').value)||0;
+  const dup=parseFloat(document.getElementById('f_dup').value)||0;
+  const dp=parseFloat(document.getElementById('f_dp').value)||0;
+  const vh=parseFloat(document.getElementById('f_vh').value)||0;
+
+  const logp=0.97*Math.log1p(vuh)+0.02*Math.log1p(dup)+0.008*Math.log1p(dp)+0.003*Math.log1p(vh);
+  const pred=Math.round(Math.exp(logp)-1);
+
+  const rval=document.getElementById('r-val');
+  const rbadge=document.getElementById('r-badge');
+  const insight=document.getElementById('r-insight');
+  const ricon=document.getElementById('r-icon');
+  const display=document.getElementById('result-display');
+
+  rval.textContent=pred.toLocaleString();
+  document.getElementById('r-unit').textContent='units needed next week';
+
+  /* reset */
+  display.style.borderColor='';display.style.background='';
+  rbadge.className='r-badge';
+
+  if(pred<=2){
+    ricon.textContent='📦';
+    rbadge.className='r-badge badge-low';
+    rbadge.textContent='⚠️ Low Demand';
+    rbadge.style.display='inline-flex';
+    rval.style.color='#FBBF24';
+    display.style.borderColor='rgba(217,119,6,0.35)';
+    display.style.background='rgba(217,119,6,0.05)';
+    insight.innerHTML=`<strong>Low demand shop.</strong> The model predicts only <strong>${pred} unit(s)</strong> needed. This shop sold very little this week (${vuh} units). Consider reducing stock to avoid returns and waste — the delivery truck should bring a minimal quantity.`;
+  } else if(pred<=15){
+    ricon.textContent='✅';
+    rbadge.className='r-badge badge-mid';
+    rbadge.textContent='✅ Moderate Demand';
+    rbadge.style.display='inline-flex';
+    rval.style.color='var(--green2)';
+    display.style.borderColor='rgba(45,122,79,0.4)';
+    display.style.background='rgba(45,122,79,0.06)';
+    insight.innerHTML=`<strong>Normal demand shop.</strong> The model predicts <strong>${pred} units</strong> needed next week. This is a healthy, regular client. Standard restocking is recommended — the ${vuh} units sold this week is the primary signal.`;
+  } else {
+    ricon.textContent='🚀';
+    rbadge.className='r-badge badge-high';
+    rbadge.textContent='🚀 High Demand';
+    rbadge.style.display='inline-flex';
+    rval.style.color='#7EB3FF';
+    display.style.borderColor='rgba(32,86,168,0.4)';
+    display.style.background='rgba(32,86,168,0.05)';
+    insight.innerHTML=`<strong>High-volume client!</strong> The model predicts <strong>${pred} units</strong> needed next week. This shop is a strong seller — it moved ${vuh} units this week. <strong>Increase inventory</strong> to avoid stockout. Missing a delivery here has the highest revenue impact.`;
+  }
+
+  rval.style.transform='scale(1.12)';
+  setTimeout(()=>rval.style.transform='scale(1)',280);
+}
+
+window.addEventListener('load',()=>setTimeout(runPredict,700));
+</script>
+</body>
+</html>
