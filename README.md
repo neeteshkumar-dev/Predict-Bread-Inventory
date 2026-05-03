@@ -75,9 +75,10 @@ model = RandomForestRegressor(
 
 model.fit(X_train, y_train)
 ---
-
-**## ⚙️ Key Design Decisions
-
+```
+## ⚙️ Key Design Decisions
+```
+```
 - **Log transform (`log1p`)**  
   Demand is highly skewed (many shops need 1–5 units, few need 500+). Log transformation stabilizes learning and aligns with RMSLE evaluation metric.
 
@@ -86,10 +87,10 @@ model.fit(X_train, y_train)
 
 - **Ensemble learning**  
   30 decision trees trained on random subsets of data → final prediction is averaged for better stability and generalization.
-
+  
+```
 ```
 ## ⚙️ ML Pipeline
-
 1. Download     → kaggle competitions download -c grupo-bimbo-inventory-demand
 2. Load         → pd.read_csv('train.csv', dtype=dtype_map, nrows=300000)
 3. Transform    → df['log_demand'] = np.log1p(df['Demanda_uni_equil'])
